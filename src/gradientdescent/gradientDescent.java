@@ -56,8 +56,8 @@ public class gradientDescent {
         double sigma = 0;
         sigma += (y(i) - HypothesisTheta(i)) * x(i, j);
 
-        System.out.println("index: " + i + " constant: " + j
-                + " :  (" + y(i) + " - " + HypothesisTheta(i) + ") * " + x(i, j) + " = " + sigma);
+        //System.out.println("index: " + i + " constant: " + j
+        //        + " :  (" + y(i) + " - " + HypothesisTheta(i) + ") * " + x(i, j) + " = " + sigma);
         sigma *= learningRate;
         constant += sigma;
 
@@ -94,12 +94,12 @@ public class gradientDescent {
     }
 
     public double evaluate(double[] data) {
-        if (cacheUpdated) {
-            updateConstants();
-        }
-
         if (data.length != numbFeats) {
             throw new IllegalArgumentException("invalid number of features");
+        }
+
+        if (cacheUpdated) {
+            updateConstants();
         }
 
         double total = 0;
@@ -111,15 +111,6 @@ public class gradientDescent {
 
     public double[] getConstants() {
         return constantArray;
-    }
-
-    public String getConstantString() {
-        String constants = "";
-
-        for (int i = 0; i < constantArray.length; ++i) {
-            constants += constantArray[i];
-        }
-        return constants;
     }
 
     public static void main(String[] args) {
@@ -136,12 +127,13 @@ public class gradientDescent {
 
             gd.addLearningData(new double[]{f1, f2, f3, ans});
         }
-        System.out.println("\n \n");
-        
-        
         System.out.println("This test involves three variables, with respective constants - 8, 2, 10");
-        
-        System.out.println("\nThe constants were evaluated to be " + gd.getConstantString());
-        System.out.println("Testing constants 6, 5, 2, \nevaluates to: " + gd.evaluate(new double[]{1, 2, 3}));
+        System.out.println("Testing constants 6, 5, 2, \nevaluates to: " + gd.evaluate(new double[]{6, 5, 2}) + "\n");
+        System.out.println("The constants were evaluated to be ");
+
+        double[] theConst = gd.getConstants();
+        for (int i = 0; i < theConst.length; ++i) {
+            System.out.println(theConst[i]);
+        }
     }
 }
