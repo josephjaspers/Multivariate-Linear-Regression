@@ -46,7 +46,9 @@ public class gradientDescent {
             }
         }
     }
-
+    //Cost function:  theta(j) = theta(j) + learningRate(y^(i) - H(theta)(x^(i),j) * (x^(i),j)
+    //  H = hypothesis, ^(i) = an index (not pow of), j = feature index  
+    //http://cs229.stanford.edu/notes/cs229-notes1.pdf (The algorithm is on pg. 5)
     public double costFunction(int j, int i) { //cost function for single update 
         int m = trainingData.size();
         double constant = constantArray[j];
