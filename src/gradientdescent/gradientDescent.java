@@ -27,25 +27,16 @@ public class gradientDescent {
         numbFeats = featureNames.length;
         constantArray = new double[featureNames.length];
         trainingData = new ArrayList<>();
-
-        initializeTheta();
-    }
-
-    public void initializeTheta() {
-        for (int i = 0; i < constantArray.length; ++i) {
-            constantArray[i] = 10;
-        }
     }
 
     public void updateConstants() {
         for (int i = 0; i < trainingData.size(); ++i) {
-
-            //System.out.println("\niteration " + i); 
             for (int j = 0; j < numbFeats; ++j) {
                 costFunction(j, i);
             }
         }
     }
+
     //Cost function:  theta(j) = theta(j) + learningRate(y^(i) - H(theta)(x^(i),j) * (x^(i),j)
     //  H = hypothesis, ^(i) = an index (not pow of), j = feature index  
     //http://cs229.stanford.edu/notes/cs229-notes1.pdf (The algorithm is on pg. 5)
@@ -55,7 +46,6 @@ public class gradientDescent {
 
         double sigma = 0;
         sigma += (y(i) - HypothesisTheta(i)) * x(i, j);
-
         //System.out.println("index: " + i + " constant: " + j
         //        + " :  (" + y(i) + " - " + HypothesisTheta(i) + ") * " + x(i, j) + " = " + sigma);
         sigma *= learningRate;
@@ -73,15 +63,11 @@ public class gradientDescent {
         return total;
     }
 
-    public double y(int index) {
+    private double y(int index) {
         return trainingData.get(index)[numbFeats]; //Get the last element in trainingData which is the learningData
     }
 
-    public double getY(int index) {
-        return trainingData.get(index)[numbFeats];
-    }
-
-    public double x(int index, int jIndex) {
+    private double x(int index, int jIndex) {
         return trainingData.get(index)[jIndex];
     }
 
@@ -119,10 +105,11 @@ public class gradientDescent {
         double f2;
         double f3;
         double ans;
-        for (int i = 0; i < 40000; i++) {
+        for (int i = 0; i < 4000; i++) {
             f1 = Math.random() * 10 + 10;
             f2 = Math.random() * 10 + 10;
             f3 = Math.random() * 10 + 10;
+
             ans = f1 * 8 + f2 * 2 + f3 * 10;
 
             gd.addLearningData(new double[]{f1, f2, f3, ans});
