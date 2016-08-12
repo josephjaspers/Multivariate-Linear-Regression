@@ -46,6 +46,7 @@ public class gradientDescent {
 
         double sigma = 0;
         sigma += (y(i) - HypothesisTheta(i)) * x(i, j);
+       System.out.println(HypothesisTheta(i));
         //System.out.println("index: " + i + " constant: " + j
         //        + " :  (" + y(i) + " - " + HypothesisTheta(i) + ") * " + x(i, j) + " = " + sigma);
         sigma *= learningRate;
@@ -101,21 +102,30 @@ public class gradientDescent {
 
     public static void main(String[] args) {
         gradientDescent gd = new gradientDescent(new String[]{"F1", "F2", "F3"});
+        double c1 = Math.random() * 10 % 5;
+        double c2 = Math.random() * 10 % 5;
+        double c3 = Math.random() * 10 % 5;
+
         double f1;
         double f2;
         double f3;
         double ans;
+
         for (int i = 0; i < 4000; i++) {
             f1 = Math.random() * 10 + 10;
             f2 = Math.random() * 10 + 10;
             f3 = Math.random() * 10 + 10;
 
-            ans = f1 * 8 + f2 * 2 + f3 * 10;
+            ans = f1 * c1 + f2 * c2 + f3 * c3;
 
             gd.addLearningData(new double[]{f1, f2, f3, ans});
         }
-        System.out.println("This test involves three variables, with respective constants - 8, 2, 10");
-        System.out.println("Testing constants 6, 5, 2, \nevaluates to: " + gd.evaluate(new double[]{6, 5, 2}) + "\n");
+        f1 = Math.random() * 10 + 10;
+        f2 = Math.random() * 10 + 10;
+        f3 = Math.random() * 10 + 10;
+
+        System.out.println("This test involves three variables, with respective constants - " + c1 + " " + c2 + " " + c3);
+        System.out.println("Testing parameters " + f1 + " " + f2 + " " + f3 + " " + "\nevaluates to: " + gd.evaluate(new double[]{f1, f2, f3}) + "\n");
         System.out.println("The constants were evaluated to be ");
 
         double[] theConst = gd.getConstants();
