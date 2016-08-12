@@ -5,6 +5,7 @@
  */
 package gradientdescent;
 
+import static gradientdescent.TestClass.testLogisticRegression;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +30,7 @@ public class gradientDescent {
         trainingData = new ArrayList<>();
     }
 
-    public void updateConstants() {
+    private void updateConstants() {
         for (int i = 0; i < trainingData.size(); ++i) {
             for (int j = 0; j < numbFeats; ++j) {
                 costFunction(j, i);
@@ -40,13 +41,13 @@ public class gradientDescent {
     //Cost function:  theta(j) = theta(j) + learningRate(y^(i) - H(theta)(x^(i),j) * (x^(i),j)
     //  H = hypothesis, ^(i) = an index (not pow of), j = feature index  
     //http://cs229.stanford.edu/notes/cs229-notes1.pdf (The algorithm is on pg. 5)
-    public double costFunction(int j, int i) { //cost function for single update 
+    private double costFunction(int j, int i) { //cost function for single update 
         int m = trainingData.size();
         double constant = constantArray[j];
 
         double sigma = 0;
         sigma += (y(i) - HypothesisTheta(i)) * x(i, j);
-       System.out.println(HypothesisTheta(i));
+        //System.out.println(HypothesisTheta(i));
         //System.out.println("index: " + i + " constant: " + j
         //        + " :  (" + y(i) + " - " + HypothesisTheta(i) + ") * " + x(i, j) + " = " + sigma);
         sigma *= learningRate;
@@ -56,7 +57,7 @@ public class gradientDescent {
         return constant;
     }
 
-    public double HypothesisTheta(int index) {
+    private double HypothesisTheta(int index) {
         double total = 0;
         for (int i = 0; i < numbFeats; ++i) {
             total += trainingData.get(index)[i] * constantArray[i];
@@ -99,38 +100,7 @@ public class gradientDescent {
     public double[] getConstants() {
         return constantArray;
     }
-
     public static void main(String[] args) {
-        gradientDescent gd = new gradientDescent(new String[]{"F1", "F2", "F3"});
-        double c1 = Math.random() * 10 % 5;
-        double c2 = Math.random() * 10 % 5;
-        double c3 = Math.random() * 10 % 5;
-
-        double f1;
-        double f2;
-        double f3;
-        double ans;
-
-        for (int i = 0; i < 4000; i++) {
-            f1 = Math.random() * 10 + 10;
-            f2 = Math.random() * 10 + 10;
-            f3 = Math.random() * 10 + 10;
-
-            ans = f1 * c1 + f2 * c2 + f3 * c3;
-
-            gd.addLearningData(new double[]{f1, f2, f3, ans});
-        }
-        f1 = Math.random() * 10 + 10;
-        f2 = Math.random() * 10 + 10;
-        f3 = Math.random() * 10 + 10;
-
-        System.out.println("This test involves three variables, with respective constants - " + c1 + " " + c2 + " " + c3);
-        System.out.println("Testing parameters " + f1 + " " + f2 + " " + f3 + " " + "\nevaluates to: " + gd.evaluate(new double[]{f1, f2, f3}) + "\n");
-        System.out.println("The constants were evaluated to be ");
-
-        double[] theConst = gd.getConstants();
-        for (int i = 0; i < theConst.length; ++i) {
-            System.out.println(theConst[i]);
-        }
+        testLogisticRegression();
     }
 }
