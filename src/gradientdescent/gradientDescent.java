@@ -13,6 +13,9 @@ import java.util.ArrayList;
  */
 public class gradientDescent {
 
+    double tolerance = 0.000000001;
+    boolean converged = false;
+    //Convergence check not yet supported 
     double learningRate = 0.0003;
 
     double[] constantArray;
@@ -30,7 +33,7 @@ public class gradientDescent {
     }
 
     public void updateConstants() {
-        for (int i = 0; i < trainingData.size(); ++i) {
+        for (int i = 0; i < trainingData.size() && !converged; ++i) {
             for (int j = 0; j < numbFeats; ++j) {
                 costFunction(j, i);
             }
@@ -46,9 +49,6 @@ public class gradientDescent {
 
         double sigma = 0;
         sigma += (y(i) - HypothesisTheta(i)) * x(i, j);
-        //System.out.println(HypothesisTheta(i));
-        //System.out.println("index: " + i + " constant: " + j
-        //        + " :  (" + y(i) + " - " + HypothesisTheta(i) + ") * " + x(i, j) + " = " + sigma);
         sigma *= learningRate;
         constant += sigma;
 
@@ -115,7 +115,6 @@ public class gradientDescent {
             f1 = Math.random() * 10 + 10;
             f2 = Math.random() * 10 + 10;
             f3 = Math.random() * 10 + 10;
-
             ans = f1 * c1 + f2 * c2 + f3 * c3;
 
             gd.addLearningData(new double[]{f1, f2, f3, ans});
