@@ -15,7 +15,7 @@ public class gradientDescent {
 
     double tolerance = 1 / 10E9;
     boolean converged = false;
-    boolean regularization = true;
+    boolean regularization = false;
     double learningRate = 0.003;
     double regularizationParameter = 0.003;
 
@@ -74,9 +74,10 @@ public class gradientDescent {
         if (!regularization || j == numbFeats - 1) {
             return 1; //For not updating the Y intercept
         }
-        double lambda = regularizationParameter;
+        double m = trainingData.size();
 
-        return 1 - learningRate * (lambda / trainingData.size());
+        double lambda = regularizationParameter;
+        return 1 - learningRate * (lambda / m);
     }
 
     private double HypothesisTheta(int index) {
@@ -164,6 +165,7 @@ public class gradientDescent {
 
     public static void main(String[] args) {
         gradientDescent gd = new gradientDescent(new String[]{"F1", "F2", "F3"});
+        //BinaryLogisticRegression gd = new BinaryLogisticRegression(new String[]{"F1", "F2", "F3"});
         double c1 = Math.random() * 10 % 5;
         double c2 = Math.random() * 10 % 5;
         double c3 = Math.random() * 10 % 5;
@@ -179,6 +181,12 @@ public class gradientDescent {
             f3 = Math.random() * 10 + 10;
             ans = f1 * c1 + f2 * c2 + f3 * c3;
 
+            //For logistic Regression test
+//            if (ans > 50) {
+//                ans = 1;
+//            } else {
+//                ans = 0;
+//            }
             gd.addLearningData(new double[]{f1, f2, f3, ans});
         }
         f1 = Math.random() * 10 + 10;
