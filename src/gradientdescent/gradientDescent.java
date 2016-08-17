@@ -15,16 +15,16 @@ public class gradientDescent {
 
     double tolerance = 1 / 10E9;
     boolean converged = false;
-    boolean regularization = false;
+    boolean regularization = true;
     double learningRate = 0.003;
+    double regularizationParameter = 0.003;
 
     double[] constants;
     ArrayList<double[]> trainingData;  // the last double element is the Y of each Theta 
     String[] featureNames;
     int numbFeats;
 
-    boolean cacheUpdated = false;
-
+    //boolean cacheUpdated = false;
     public gradientDescent(String[] featureNames) {
         this.featureNames = featureNames;
         numbFeats = featureNames.length + 1; //y(last feature is the y intercept)
@@ -32,11 +32,23 @@ public class gradientDescent {
         trainingData = new ArrayList<>();
     }
 
-    public void updateConstants() {
+    public void reTrain() {
         for (int i = 0; i < trainingData.size() && !converged; ++i) {
             for (int j = 0; j < numbFeats; ++j) {
                 costFunction(j, i);
             }
+        }
+    } // reviews all the Data 
+
+    public void reTrain(int times) {
+        for (int i = 0; i < times; ++i) {
+            reTrain();
+        }
+    }
+
+    private void updateTrainingData(double[] data) {
+        for (int j = 0; j < numbFeats; ++j) {
+            costFunction(j, trainingData.size() - 1);
         }
     }
 
@@ -48,10 +60,10 @@ public class gradientDescent {
         double constant = constants[j];
 
         double sigma = 0;
-        //sigma += (y(i) - HypothesisTheta(i)) * x(i, j);
-        sigma += -(HypothesisTheta(i) - y(i)) * x(i, j) + regularization(j);
-        //sigma += -(1 / (2 * m)) * Math.pow((HypothesisTheta(i) - y(i)), 2);
+        sigma += (y(i) - HypothesisTheta(i)) * x(i, j);
+        //sigma += -(HypothesisTheta(i) - y(i)) * x(i, j);
         sigma *= learningRate;
+        constant *= regularization(j);
         constant += sigma;
 
         constants[j] = constant;
@@ -59,17 +71,12 @@ public class gradientDescent {
     }
 
     private double regularization(int j) {
-        if (!regularization) {
-            return 0;
+        if (!regularization || j == numbFeats - 1) {
+            return 1; //For not updating the Y intercept
         }
-        double lambda = 1 / 10E20;
+        double lambda = regularizationParameter;
 
-        double sigma = 0;
-        for (int i = 0; i < numbFeats - 1; ++i) { //numbfeats - 1 because y intercept is last
-            sigma += trainingData.get(j)[i];
-            sigma = Math.pow(sigma, 2); // square it 
-        }
-        return sigma * lambda;
+        return 1 - learningRate * (lambda / trainingData.size());
     }
 
     private double HypothesisTheta(int index) {
@@ -96,17 +103,14 @@ public class gradientDescent {
         if (data.length != numbFeats) {
             throw new IllegalArgumentException("Must have all features + solution - curr sz: " + data.length);
         }
-        cacheUpdated = true;
+//        cacheUpdated = false;
         trainingData.add(data);
+        updateTrainingData(data);
     }
 
     public double evaluate(double[] data) {
         if (data.length != numbFeats - 1) {//Excludes y intercept
             throw new IllegalArgumentException("invalid number of features");
-        }
-
-        if (cacheUpdated) {
-            updateConstants();
         }
 
         double total = 0;
@@ -134,6 +138,10 @@ public class gradientDescent {
         tolerance = t;
     }
 
+    public void setRegularizationRate(double r) {
+        regularizationParameter = r;
+    }
+
     public double getLearningRate() {
         return learningRate;
     }
@@ -144,6 +152,10 @@ public class gradientDescent {
 
     public double[] getConstants() {
         return constants.clone();
+    }
+
+    public double getRegularizationParameter() {
+        return regularizationParameter;
     }
 
     public boolean isRegularized() {
@@ -161,7 +173,7 @@ public class gradientDescent {
         double f3;
         double ans;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             f1 = Math.random() * 10 + 10;
             f2 = Math.random() * 10 + 10;
             f3 = Math.random() * 10 + 10;
@@ -172,6 +184,8 @@ public class gradientDescent {
         f1 = Math.random() * 10 + 10;
         f2 = Math.random() * 10 + 10;
         f3 = Math.random() * 10 + 10;
+
+        gd.reTrain(100); //reTrain the data looks over the given dataSet and reiterates gradient Descent upon it 
 
         System.out.println("This test involves three variables, with respective constants - " + c1 + " " + c2 + " " + c3);
         System.out.println("Testing parameters " + f1 + " " + f2 + " " + f3 + " " + "\nevaluates to: " + gd.evaluate(new double[]{f1, f2, f3}) + "\n");
