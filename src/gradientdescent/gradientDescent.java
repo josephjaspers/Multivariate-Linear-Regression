@@ -13,10 +13,9 @@ import java.util.ArrayList;
  */
 public class gradientDescent {
 
-    int minimumIterations;  
-    double tolerance = 0.000000001;
+    double tolerance = 1 / 10E9;
     boolean converged = false;
-    //Convergence check not yet supported 
+    boolean regularization = false;
     double learningRate = 0.003;
 
     double[] constants;
@@ -44,12 +43,14 @@ public class gradientDescent {
     //Cost function:  theta(j) = theta(j) + learningRate(y^(i) - H(theta)(x^(i),j) * (x^(i),j)
     //  H = hypothesis, ^(i) = an index (not pow of), j = feature index  
     //http://cs229.stanford.edu/notes/cs229-notes1.pdf (The algorithm is on pg. 5)
-    public double costFunction(int j, int i) { //cost function for single update 
+    private double costFunction(int j, int i) { //cost function for single update 
         int m = trainingData.size();
         double constant = constants[j];
 
         double sigma = 0;
-        sigma += (y(i) - HypothesisTheta(i)) * x(i, j);
+        //sigma += (y(i) - HypothesisTheta(i)) * x(i, j);
+        sigma += -(HypothesisTheta(i) - y(i)) * x(i, j) + regularization(j);
+        //sigma += -(1 / (2 * m)) * Math.pow((HypothesisTheta(i) - y(i)), 2);
         sigma *= learningRate;
         constant += sigma;
 
@@ -57,7 +58,21 @@ public class gradientDescent {
         return constant;
     }
 
-    public double HypothesisTheta(int index) {
+    private double regularization(int j) {
+        if (!regularization) {
+            return 0;
+        }
+        double lambda = 1 / 10E20;
+
+        double sigma = 0;
+        for (int i = 0; i < numbFeats - 1; ++i) { //numbfeats - 1 because y intercept is last
+            sigma += trainingData.get(j)[i];
+            sigma = Math.pow(sigma, 2); // square it 
+        }
+        return sigma * lambda;
+    }
+
+    private double HypothesisTheta(int index) {
         double total = 0;
         for (int i = 0; i < numbFeats; ++i) {
             if (i == numbFeats - 1) {
@@ -69,11 +84,11 @@ public class gradientDescent {
         return total;
     }
 
-    public double y(int index) {
+    private double y(int index) {
         return trainingData.get(index)[numbFeats - 1]; //Get the last element in trainingData which is the learningData
     }
 
-    public double x(int index, int jIndex) {
+    private double x(int index, int jIndex) {
         return trainingData.get(index)[jIndex];
     }
 
@@ -101,8 +116,38 @@ public class gradientDescent {
         return total;
     }
 
+    //turn on regularization - Good for data sets with a large amount of parameters 
+    public boolean setRegularization(boolean onOff) {
+        if (regularization == onOff) {
+            return false;
+        } else {
+            regularization = onOff;
+            return true;
+        }
+    }
+
+    public void setLearningRate(double lr) {
+        learningRate = lr;
+    }
+
+    public void setTolerance(double t) {
+        tolerance = t;
+    }
+
+    public double getLearningRate() {
+        return learningRate;
+    }
+
+    public double getTolerance() {
+        return tolerance;
+    }
+
     public double[] getConstants() {
-        return constants;
+        return constants.clone();
+    }
+
+    public boolean isRegularized() {
+        return regularization;
     }
 
     public static void main(String[] args) {
