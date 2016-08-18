@@ -5,6 +5,8 @@
  */
 package gradientdescent;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Joseph
@@ -22,8 +24,8 @@ public class BinaryLogisticRegression extends gradientDescent {
 
     private double HypothesisTheta(int index) {
         double total = 0;
-        for (int i = 0; i < numbFeats; ++i) {
-            total += 1 / trainingData.get(index)[i] * constants[i];
+        for (int i = 0; i < super.getFeatureLength(); ++i) {
+            total += 1 / super.getTrainingData().get(index)[i] * super.getConstants()[i];
         }
         return 1 / (1 + Math.pow(E, -total));
     }
@@ -39,8 +41,8 @@ public class BinaryLogisticRegression extends gradientDescent {
     }
 
     private void updateTrainingData(double[] data) {
-        for (int j = 0; j < numbFeats; ++j) {
-            costFunction(j, trainingData.size() - 1);
+        for (int j = 0; j < super.getFeatureLength(); ++j) {
+            costFunction(j, super.getTrainingData().size() - 1);
         }
     }
 
@@ -48,21 +50,27 @@ public class BinaryLogisticRegression extends gradientDescent {
     //  H = hypothesis, ^(i) = an index (not pow of), j = feature index  
     //http://cs229.stanford.edu/notes/cs229-notes1.pdf (The algorithm is on pg. 5)
     private double costFunction(int j, int i) { //cost function for single update 
-        int m = trainingData.size();
-        double constant = constants[j];
+        int m = super.getTrainingData().size();
+        double constant = super.getConstants()[j];
 
         double sigma = 0;
         sigma += (y(i) - HypothesisTheta(i)) * x(i, j);
         //sigma += -(HypothesisTheta(i) - y(i)) * x(i, j);
-        sigma *= learningRate;
+        sigma *= super.getLearningRate();
         constant *= regularization(j);
         constant += sigma;
 
-        constants[j] = constant;
+        super.getConstants()[j] = constant;
         return constant;
     }
 
     private double regularization(int j) {
+        boolean regularization = super.isRegularized();
+        int numbFeats = super.getFeatureLength();
+        ArrayList<double[]> trainingData = super.getTrainingData();
+        double regularizationParameter = super.getRegularizationParameter();
+        double learningRate = super.getLearningRate();
+
         if (!regularization || j == numbFeats - 1) {
             return 1; //For not updating the Y intercept
         }
@@ -73,11 +81,12 @@ public class BinaryLogisticRegression extends gradientDescent {
     }
 
     private double y(int index) {
-        return trainingData.get(index)[numbFeats - 1]; //Get the last element in trainingData which is the learningData
+
+        return super.getTrainingData().get(index)[super.getFeatureLength() - 1]; //Get the last element in trainingData which is the learningData
     }
 
     private double x(int index, int jIndex) {
-        return trainingData.get(index)[jIndex];
+        return super.getTrainingData().get(index)[jIndex];
     }
 
     @Override
@@ -125,6 +134,7 @@ public class BinaryLogisticRegression extends gradientDescent {
     public double[] getConstants() {
         return super.getConstants();
     }
+
     @Override
     public String[] getFeatureNames() {
         return super.getFeatureNames();

@@ -13,16 +13,16 @@ import java.util.ArrayList;
  */
 public class gradientDescent {
 
-    double tolerance = 1 / 10E9;
-    boolean converged = false;
-    boolean regularization = false;
-    double learningRate = 0.003;
-    double regularizationParameter = 0.003;
+    private double tolerance = 1 / 10E10;
+    private boolean converged = false; // Need to add convergence check
+    private boolean regularization = false;
+    private double learningRate = 0.003;
+    private double regularizationParameter = 0.003;
 
-    double[] constants;
-    ArrayList<double[]> trainingData;  // the last double element is the Y of each Theta 
-    String[] featureNames;
-    int numbFeats;
+    private double[] constants;
+    private ArrayList<double[]> trainingData;  // the last double element is the Y of each Theta 
+    private String[] featureNames;
+    private int numbFeats;
 
     //boolean cacheUpdated = false;
     public gradientDescent(String[] featureNames) {
@@ -178,9 +178,16 @@ public class gradientDescent {
     public double[] getConstants() {
         return constants;
     }
+    public int getFeatureLength() {
+        return numbFeats;
+    }
 
     public double getRegularizationParameter() {
         return regularizationParameter;
+    }
+
+    public ArrayList<double[]> getTrainingData() {
+        return trainingData;
     }
 
     public boolean isRegularized() {
