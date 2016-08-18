@@ -15,6 +15,9 @@ public class BinaryLogisticRegression extends gradientDescent {
 
     public BinaryLogisticRegression(String[] featureNames) {
         super(featureNames);
+        if (featureNames.length != 2) {
+            throw new IllegalArgumentException("number of features must be equal to two (1 and 0)");
+        }
     }
 
     private double HypothesisTheta(int index) {
@@ -121,6 +124,10 @@ public class BinaryLogisticRegression extends gradientDescent {
     @Override
     public double[] getConstants() {
         return super.getConstants();
+    }
+    @Override
+    public String[] getFeatureNames() {
+        return super.getFeatureNames();
     }
 
     @Override

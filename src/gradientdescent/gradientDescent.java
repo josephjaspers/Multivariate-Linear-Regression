@@ -109,6 +109,24 @@ public class gradientDescent {
         updateTrainingData(data);
     }
 
+    public void resetConstants() {
+        constants = new double[constants.length];
+    }
+
+    public void resetConstants(boolean update) {
+        resetConstants();
+        if (update) {
+            reTrain();
+        }
+    }
+
+    public void clearTrainingData(boolean maintainConstants) {
+        trainingData = new ArrayList<>();
+        if (!maintainConstants) {
+            resetConstants();
+        }
+    }
+
     public double evaluate(double[] data) {
         if (data.length != numbFeats - 1) {//Excludes y intercept
             throw new IllegalArgumentException("invalid number of features");
@@ -127,6 +145,8 @@ public class gradientDescent {
             return false;
         } else {
             regularization = onOff;
+            resetConstants();
+            reTrain();
             return true;
         }
     }
@@ -143,6 +163,10 @@ public class gradientDescent {
         regularizationParameter = r;
     }
 
+    public String[] getFeatureNames() {
+        return featureNames;
+    }
+
     public double getLearningRate() {
         return learningRate;
     }
@@ -152,7 +176,7 @@ public class gradientDescent {
     }
 
     public double[] getConstants() {
-        return constants.clone();
+        return constants;
     }
 
     public double getRegularizationParameter() {
