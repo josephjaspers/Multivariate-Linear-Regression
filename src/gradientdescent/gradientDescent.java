@@ -178,6 +178,7 @@ public class gradientDescent {
     public double[] getConstants() {
         return constants;
     }
+
     public int getFeatureLength() {
         return numbFeats;
     }
@@ -220,9 +221,9 @@ public class gradientDescent {
 //            }
             gd.addLearningData(new double[]{f1, f2, f3, ans});
         }
-        f1 = Math.random() * 10 + 10;
-        f2 = Math.random() * 10 + 10;
-        f3 = Math.random() * 10 + 10;
+        f1 = Math.random() * 10 + 1;
+        f2 = Math.random() * 10 + 1;
+        f3 = Math.random() * 10 + 1;
 
         gd.reTrain(100); //reTrain the data looks over the given dataSet and reiterates gradient Descent upon it 
 
