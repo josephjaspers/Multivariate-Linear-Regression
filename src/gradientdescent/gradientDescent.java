@@ -5,13 +5,14 @@
  */
 package gradientdescent;
 
+import static gradientdescent.testClass.GradientDescentTest;
 import java.util.ArrayList;
 
 /**
  *
  * @author Joseph
  */
-public class gradientDescent {
+public class gradientDescent { 
 
     private double tolerance = 1 / 10E10;
     private boolean converged = false; // Need to add convergence check
@@ -136,6 +137,7 @@ public class gradientDescent {
         for (int i = 0; i < data.length; ++i) {
             total += data[i] * constants[i];
         }
+        total += constants[numbFeats - 1]; //adds the y intercept 
         return total;
     }
 
@@ -196,44 +198,6 @@ public class gradientDescent {
     }
 
     public static void main(String[] args) {
-        gradientDescent gd = new gradientDescent(new String[]{"F1", "F2", "F3"});
-        //BinaryLogisticRegression gd = new BinaryLogisticRegression(new String[]{"F1", "F2", "F3"});
-        double c1 = Math.random() * 10 % 5;
-        double c2 = Math.random() * 10 % 5;
-        double c3 = Math.random() * 10 % 5;
-
-        double f1;
-        double f2;
-        double f3;
-        double ans;
-
-        for (int i = 0; i < 100; i++) {
-            f1 = Math.random() * 10 + 10;
-            f2 = Math.random() * 10 + 10;
-            f3 = Math.random() * 10 + 10;
-            ans = f1 * c1 + f2 * c2 + f3 * c3;
-
-            //For logistic Regression test
-//            if (ans > 50) {
-//                ans = 1;
-//            } else {
-//                ans = 0;
-//            }
-            gd.addLearningData(new double[]{f1, f2, f3, ans});
-        }
-        f1 = Math.random() * 10 + 1;
-        f2 = Math.random() * 10 + 1;
-        f3 = Math.random() * 10 + 1;
-
-        gd.reTrain(100); //reTrain the data looks over the given dataSet and reiterates gradient Descent upon it 
-
-        System.out.println("This test involves three variables, with respective constants - " + c1 + " " + c2 + " " + c3);
-        System.out.println("Testing parameters " + f1 + " " + f2 + " " + f3 + " " + "\nevaluates to: " + gd.evaluate(new double[]{f1, f2, f3}) + "\n");
-        System.out.println("The constants were evaluated to be ");
-
-        double[] theConst = gd.getConstants();
-        for (int i = 0; i < theConst.length; ++i) {
-            System.out.println(theConst[i]);
-        }
+        GradientDescentTest();
     }
 }
