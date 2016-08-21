@@ -6,13 +6,14 @@
 package gradientdescent;
 
 import static gradientdescent.testClass.GradientDescentTest;
+import static gradientdescent.testClass.network;
 import java.util.ArrayList;
 
 /**
  *
  * @author Joseph
  */
-public class gradientDescent { 
+public class gradientDescent {
 
     private double tolerance = 1 / 10E10;
     private boolean converged = false; // Need to add convergence check

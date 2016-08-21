@@ -5,6 +5,8 @@
  */
 package gradientdescent;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Joseph
@@ -44,5 +46,4 @@ public class testClass {
             System.out.println(theConst[i]);
         }
     }
-
 }
